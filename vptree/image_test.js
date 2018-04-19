@@ -1,5 +1,5 @@
 const fs = require('fs');
-const VPTreeFactory = require('./vptreeJS/vptree.js');
+const VPTreeFactory = require('./vptreeJS/vptree.min.js');
 
 
 
