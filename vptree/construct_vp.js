@@ -32,12 +32,12 @@ query_index = 0
 // building the tree
 vptree = VPTreeFactory.build(images, pixelDistancesSum);
 
-fs.writeFile("./precomputed_vptree.json", JSON.stringify(vptree), function(err) {
+fs.writeFile("./precomputed_vptree.json", JSON.stringify(vptree.stringify()), function(err) {
     if(err) {
         return console.log(err);
     }
 
-    console.log("The file was saved!");
+    console.log("The vptree file was saved!");
 });
 
 /*nearests = vptree.search(distancesById['way_219554999'], 5);

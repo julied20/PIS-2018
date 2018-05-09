@@ -1,15 +1,9 @@
 let vptree;
 
-$.ajax({
-  url: 'static/precomputed_vptree.json',
-  dataType: 'json',
-  data: '',
-  type: 'GET',
-  success: function(data) {
-    vptree = data;
-  },
-});
+let lakeIDs = []
+let lakeDistanceImages = []
 
+constructVPtree();
 
 let line = d3.line()
   .curve(d3.curveBasis);
@@ -22,6 +16,14 @@ let svg = d3.select("svg")
     .subject(function() { let p = [d3.event.x, d3.event.y]; return [p, p]; })
     .on("start", dragstarted)
     .on("end", dragstopped));
+
+const distanceImageSize = 50;
+const distanceCanvasScale = 10;
+
+let distanceCanvas = d3.select('body')
+  .append('canvas')
+  .attr('width', distanceImageSize * distanceCanvasScale)
+  .attr('height', distanceImageSize * distanceCanvasScale);
 
 function dragstopped() {
   const width = 500;
@@ -67,13 +69,13 @@ function dragstopped() {
       data: {img: canvasUrl},
       type: 'POST',
       success: function(distanceImage) {
-        displayNeighbors(distanceImage);
+        displayNeighbors(distanceImage.distance);
       }
     });
   }
   // start loading the image.
   img.src = url;
-  }
+}
 
 function dragstarted() {
   svg.selectAll("*").remove();
@@ -96,3 +98,78 @@ function dragstarted() {
   });
 }
 
+
+function displayNeighbors(distanceImage) {
+  drawDistanceImage(distanceImage);
+
+
+  results = vptree.search(distanceImage, 5);
+
+  lakeIndex = results[0].i;
+
+  //drawDistanceImage(lakeDistanceImages[lakeIndex])
+}
+
+
+const distance = (pixel1, pixel2) => Math.abs(pixel1 - pixel2);
+
+function pixelDistancesSum(im1, im2) {
+  let distancesSum = 0;
+
+	for (let i = 0; i < im1.length; i++) {
+		for (let j = 0; j < im1[0].length; j++) {
+      distancesSum += distance(im1[i][j], im2[i][j]);
+    }
+	}
+
+  return distancesSum;
+}
+
+
+function constructVPtree() {
+  $.ajax({
+    url: 'static/vptree/distance_images.json',
+    dataType: 'json',
+    data: '',
+    type: 'GET',
+    success: function(distancesById) {
+      for (let id in distancesById) {
+        lakeIDs.push(id)
+        lakeDistanceImages.push(distancesById[id])
+      }
+
+      vptree = VPTreeFactory.build(lakeDistanceImages, pixelDistancesSum);
+    },
+  });
+}
+
+
+let colorScale = d3.scaleLinear().domain([0,15])
+  .interpolate(d3.interpolateHcl)
+  .range([d3.rgb("#FFFFFF"), d3.rgb('#00004C')]);
+
+
+function drawDistanceImage(distanceImage){
+  clearDistanceCanvas();
+  let ctx = distanceCanvas.node().getContext("2d");
+
+  for (let x = 0; x < distanceImageSize; x+=1) {
+    for (let y = 0; y < distanceImageSize; y+=1) {
+      let distance = distanceImage[x][y]
+
+      if (distance > 0) {
+        ctx.fillStyle = colorScale(distance);
+        ctx.fillRect(
+          x * distanceCanvasScale, y * distanceCanvasScale,
+          distanceCanvasScale, distanceCanvasScale
+        );
+      }
+    }
+  }
+
+}
+
+function clearDistanceCanvas() {
+  let ctx = distanceCanvas.node().getContext("2d");
+  ctx.clearRect(0, 0, distanceImageSize * distanceCanvasScale, distanceImageSize * distanceCanvasScale);
+}
