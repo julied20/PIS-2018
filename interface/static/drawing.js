@@ -1,14 +1,27 @@
+let vptree;
+
+$.ajax({
+  url: 'static/precomputed_vptree.json',
+  dataType: 'json',
+  data: '',
+  type: 'GET',
+  success: function(data) {
+    vptree = data;
+  },
+});
+
+
 let line = d3.line()
-    .curve(d3.curveBasis);
+  .curve(d3.curveBasis);
 
 const hidden = d3.select('#hidden');
 
 let svg = d3.select("svg")
-    .call(d3.drag()
-        .container(function() { return this; })
-        .subject(function() { let p = [d3.event.x, d3.event.y]; return [p, p]; })
-        .on("start", dragstarted)
-        .on("end", dragstopped));
+  .call(d3.drag()
+    .container(function() { return this; })
+    .subject(function() { let p = [d3.event.x, d3.event.y]; return [p, p]; })
+    .on("start", dragstarted)
+    .on("end", dragstopped));
 
 function dragstopped() {
   const width = 500;
@@ -38,7 +51,7 @@ function dragstopped() {
     let ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0);
     let canvasUrl = canvas.toDataURL("image/png");
-    let img2 = d3.select('body').append('img')
+    let img2 = hidden.append('img')
       .attr('width', width)
       .attr('height', height)
       .node();
@@ -53,8 +66,8 @@ function dragstopped() {
       dataType: 'json',
       data: {img: canvasUrl},
       type: 'POST',
-      success: function(data) {
-        console.log(data);
+      success: function(distanceImage) {
+        displayNeighbors(distanceImage);
       }
     });
   }
@@ -67,15 +80,15 @@ function dragstarted() {
   hidden.selectAll("*").remove();
 
   let d = d3.event.subject,
-      active = svg.append("path").datum(d),
-      x0 = d3.event.x,
-      y0 = d3.event.y;
+    active = svg.append("path").datum(d),
+    x0 = d3.event.x,
+    y0 = d3.event.y;
 
   d3.event.on("drag", function() {
     let x1 = d3.event.x,
-        y1 = d3.event.y,
-        dx = x1 - x0,
-        dy = y1 - y0;
+      y1 = d3.event.y,
+      dx = x1 - x0,
+      dy = y1 - y0;
 
     if (dx * dx + dy * dy > 100) d.push([x0 = x1, y0 = y1]);
     else d[d.length - 1] = [x1, y1];
