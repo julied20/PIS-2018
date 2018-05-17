@@ -10,7 +10,7 @@ let line = d3.line()
 
 const hidden = d3.select('#hidden');
 
-let svg = d3.select("svg")
+let drawingSvg = d3.select("svg")
   .call(d3.drag()
     .container(function() { return this; })
     .subject(function() { let p = [d3.event.x, d3.event.y]; return [p, p]; })
@@ -20,12 +20,11 @@ let svg = d3.select("svg")
 const distanceImageSize = 50;
 const distanceCanvasScale = 10;
 
-const lakeDivSize = 200;
+const resultDiv = d3.select('#resultDiv');
+const resultDivRect = resultDiv.node().getBoundingClientRect();
 
-const lakeDiv = d3.select('body')
-  .append('div')
-  .attr('width', lakeDivSize * 5)
-  .attr('height', lakeDivSize);
+const lakeResultWidth = resultDivRect.width;
+const lakeResultHeight = resultDivRect.height / 5.0;
 
 const distanceCanvas = d3.select('body')
   .append('canvas')
@@ -41,7 +40,7 @@ function dragstopped() {
     + '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
 
   // serialize our SVG XML to a string.
-  var source = (new XMLSerializer()).serializeToString(svg.node());
+  var source = (new XMLSerializer()).serializeToString(drawingSvg.node());
 
   // create a file blob of our SVG.
   var blob = new Blob([ doctype + source], { type: 'image/svg+xml;charset=utf-8' });
@@ -86,11 +85,11 @@ function dragstopped() {
 }
 
 function dragstarted() {
-  svg.selectAll("*").remove();
+  drawingSvg.selectAll("*").remove();
   hidden.selectAll("*").remove();
 
   let d = d3.event.subject,
-    active = svg.append("path").datum(d),
+    active = drawingSvg.append("path").datum(d),
     x0 = d3.event.x,
     y0 = d3.event.y;
 
@@ -108,7 +107,7 @@ function dragstarted() {
 
 
 function displayNeighbors(distanceImage) {
-  //drawDistanceImage(distanceImage);
+  drawDistanceImage(distanceImage);
 
   results = vptree.search(distanceImage, 5);
 
@@ -162,11 +161,17 @@ let colorScale = d3.scaleLinear().domain([0,15])
 function drawLakes(resultIDs) {
   clearLakeDiv();
 
+  const imageSize = Math.min(lakeResultHeight, lakeResultWidth);
+
   resultIDs.forEach((lakeID) => {
-    lakeDiv.append('img')
+    resultDiv.append('div')
+      .style('width', lakeResultWidth + 'px')
+      .style('height', lakeResultHeight + 'px')
+    .append('img')
       .attr('src', 'static/images/lakes_collection/' + lakeID + '_raw.png')
-      .attr('width', lakeDivSize)
-      .attr('height', lakeDivSize);
+      .attr('width', imageSize)
+      .attr('height', imageSize)
+
   })
 }
 
@@ -192,7 +197,7 @@ function drawDistanceImage(distanceImage){
 }
 
 function clearLakeDiv() {
-  lakeDiv.html("");
+  resultDiv.html("");
 }
 
 function clearDistanceCanvas() {

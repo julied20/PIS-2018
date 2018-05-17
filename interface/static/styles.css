@@ -1,0 +1,24 @@
+body {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+  overflow: hidden;
+}
+
+#drawingDiv {
+  position: relative;
+  width: 70%;
+  height: 100%;
+  float: left;
+}
+
+#resultDiv {
+  position: relative;
+  width: 30%;
+  height: 100%;
+  float: right;
+  background-color: #fafafa;
+}
