@@ -2,6 +2,7 @@
 leonardo-git
 lake_collection
 posters
+static/images
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
