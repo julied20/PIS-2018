@@ -5,7 +5,6 @@ import json
 
 
 from PIL import Image
-import matplotlib.pyplot as plt
 
 from utils import get_medial_axis_distance
 
