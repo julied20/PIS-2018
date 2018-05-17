@@ -1,9 +1,11 @@
 let vptree;
+let lakes_infos;
 
-let lakeIDs = []
-let lakeDistanceImages = []
+let lakeIDs = [];
+let lakeDistanceImages = [];
 
 constructVPtree();
+loadMetadatas();
 
 let line = d3.line()
   .curve(d3.curveBasis);
@@ -85,6 +87,8 @@ function dragstopped() {
 }
 
 function dragstarted() {
+  clearResultTable();
+
   drawingSvg.selectAll("*").remove();
   hidden.selectAll("*").remove();
 
@@ -137,6 +141,17 @@ function pixelDistancesSum(im1, im2) {
   return distancesSum;
 }
 
+function loadMetadatas() {
+  $.ajax({
+    url: 'static/lakes_infos.json',
+    dataType: 'json',
+    data: '',
+    type: 'GET',
+    success: function(lakes_infos_data) {
+      lakes_infos = lakes_infos_data;
+    },
+  });
+}
 
 function constructVPtree() {
   $.ajax({
@@ -162,8 +177,6 @@ let colorScale = d3.scaleLinear().domain([0,15])
 
 
 function drawLakes(resultIDs) {
-  clearResultTable();
-
   const imageSize = Math.min(lakeResultHeight, lakeResultWidth);
 
   resultIDs.forEach((lakeID) => {
@@ -188,10 +201,9 @@ function drawLakes(resultIDs) {
           .attr('class', 'sideText')
           .attr('href', OSMconstructURL(lakeID))
           .attr('target', '_blank')
-          .text(lakeID)
+          .text(lakes_infos[lakeID].name || 'Unnamed lake')
   })
 }
-
 
 function drawDistanceImage(distanceImage){
   clearDistanceCanvas();

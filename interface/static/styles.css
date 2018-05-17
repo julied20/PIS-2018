@@ -21,6 +21,16 @@ body {
   width: 70%;
   height: 100%;
   float: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #f0f0f0;
+}
+
+#title {
+  font-family: traveling__typewriterregular;
+  font-size: 2.5em;
 }
 
 #resultTable {
@@ -45,4 +55,8 @@ body {
 #resultTable .sideText {
   text-decoration: none;
   color: black;
+}
+
+.white {
+  background-color: white;
 }
