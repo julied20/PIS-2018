@@ -20,11 +20,11 @@ let drawingSvg = d3.select("svg")
 const distanceImageSize = 50;
 const distanceCanvasScale = 10;
 
-const resultDiv = d3.select('#resultDiv');
-const resultDivRect = resultDiv.node().getBoundingClientRect();
+const resultTable = d3.select('#resultTable');
+const resultTableRect = resultTable.node().getBoundingClientRect();
 
-const lakeResultWidth = resultDivRect.width;
-const lakeResultHeight = resultDivRect.height / 5.0;
+const lakeResultWidth = resultTableRect.width;
+const lakeResultHeight = resultTableRect.height / 5.0;
 
 const distanceCanvas = d3.select('body')
   .append('canvas')
@@ -105,6 +105,9 @@ function dragstarted() {
   });
 }
 
+function OSMconstructURL(lakeID) {
+  return 'https://openstreetmap.org/' + lakeID.replace('_', '/');
+}
 
 function displayNeighbors(distanceImage) {
   drawDistanceImage(distanceImage);
@@ -159,19 +162,31 @@ let colorScale = d3.scaleLinear().domain([0,15])
 
 
 function drawLakes(resultIDs) {
-  clearLakeDiv();
+  clearResultTable();
 
   const imageSize = Math.min(lakeResultHeight, lakeResultWidth);
 
   resultIDs.forEach((lakeID) => {
-    resultDiv.append('div')
-      .style('width', lakeResultWidth + 'px')
-      .style('height', lakeResultHeight + 'px')
-    .append('img')
-      .attr('src', 'static/images/lakes_collection/' + lakeID + '_raw.png')
-      .attr('width', imageSize)
-      .attr('height', imageSize)
+    const lakeTr = resultTable
+      .append('tr')
+        .attr('class', 'lakeTr')
+        .style('width', lakeResultWidth + 'px')
+        .style('height', lakeResultHeight + 'px');
 
+    lakeTr
+      .append('td')
+        .style('width', imageSize + 'px')
+        .style('height', imageSize + 'px')
+        .append('img')
+          .attr('src', 'static/images/lakes_collection/' + lakeID + '_raw.png')
+          .attr('width', imageSize)
+          .attr('height', imageSize);
+
+    lakeTr
+      .append('td')
+        .append('span')
+          .attr('class', 'sideText')
+          .text(lakeID)
   })
 }
 
@@ -193,11 +208,10 @@ function drawDistanceImage(distanceImage){
       }
     }
   }
-
 }
 
-function clearLakeDiv() {
-  resultDiv.html("");
+function clearResultTable() {
+  resultTable.html("");
 }
 
 function clearDistanceCanvas() {
