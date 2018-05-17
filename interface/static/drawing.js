@@ -20,10 +20,18 @@ let svg = d3.select("svg")
 const distanceImageSize = 50;
 const distanceCanvasScale = 10;
 
-let distanceCanvas = d3.select('body')
+const lakeDivSize = 200;
+
+const lakeDiv = d3.select('body')
+  .append('div')
+  .attr('width', lakeDivSize * 5)
+  .attr('height', lakeDivSize);
+
+const distanceCanvas = d3.select('body')
   .append('canvas')
   .attr('width', distanceImageSize * distanceCanvasScale)
-  .attr('height', distanceImageSize * distanceCanvasScale);
+  .attr('height', distanceImageSize * distanceCanvasScale)
+  .attr('style', 'display: none')
 
 function dragstopped() {
   const width = 500;
@@ -100,13 +108,15 @@ function dragstarted() {
 
 
 function displayNeighbors(distanceImage) {
-  drawDistanceImage(distanceImage);
-
+  //drawDistanceImage(distanceImage);
 
   results = vptree.search(distanceImage, 5);
 
   lakeIndex = results[0].i;
 
+  const resultIDs = results.map((result) => lakeIDs[result.i]);
+
+  drawLakes(resultIDs);
   //drawDistanceImage(lakeDistanceImages[lakeIndex])
 }
 
@@ -149,6 +159,18 @@ let colorScale = d3.scaleLinear().domain([0,15])
   .range([d3.rgb("#FFFFFF"), d3.rgb('#00004C')]);
 
 
+function drawLakes(resultIDs) {
+  clearLakeDiv();
+
+  resultIDs.forEach((lakeID) => {
+    lakeDiv.append('img')
+      .attr('src', 'static/images/lakes_collection/' + lakeID + '_raw.png')
+      .attr('width', lakeDivSize)
+      .attr('height', lakeDivSize);
+  })
+}
+
+
 function drawDistanceImage(distanceImage){
   clearDistanceCanvas();
   let ctx = distanceCanvas.node().getContext("2d");
@@ -167,6 +189,10 @@ function drawDistanceImage(distanceImage){
     }
   }
 
+}
+
+function clearLakeDiv() {
+  lakeDiv.html("");
 }
 
 function clearDistanceCanvas() {
