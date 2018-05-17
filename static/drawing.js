@@ -191,7 +191,7 @@ function drawLakes(resultIDs) {
         .style('width', imageSize + 'px')
         .style('height', imageSize + 'px')
         .append('img')
-          .attr('src', 'static/images/lakes_collection/' + lakeID + '_raw.png')
+          .attr('src', 'https://storage.googleapis.com/sketch-a-lake/lakes_collection/' + lakeID + '_raw.png')
           .attr('width', imageSize)
           .attr('height', imageSize);
 
