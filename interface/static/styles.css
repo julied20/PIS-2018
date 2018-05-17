@@ -41,3 +41,8 @@ body {
 #resultTable img {
   vertical-align: bottom;
 }
+
+#resultTable .sideText {
+  text-decoration: none;
+  color: black;
+}

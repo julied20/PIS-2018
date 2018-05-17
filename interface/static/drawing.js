@@ -89,7 +89,7 @@ function dragstarted() {
   hidden.selectAll("*").remove();
 
   let d = d3.event.subject,
-    active = drawingSvg.append("path").datum(d),
+    active = drawingSvg.append("path").attr('fill', '#044f67').datum(d),
     x0 = d3.event.x,
     y0 = d3.event.y;
 
@@ -184,8 +184,10 @@ function drawLakes(resultIDs) {
 
     lakeTr
       .append('td')
-        .append('span')
+        .append('a')
           .attr('class', 'sideText')
+          .attr('href', OSMconstructURL(lakeID))
+          .attr('target', '_blank')
           .text(lakeID)
   })
 }
