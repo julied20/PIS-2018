@@ -12,12 +12,17 @@ let line = d3.line()
 
 const hidden = d3.select('#hidden');
 
+const inspectorDiv = d3.select('#inspectorDiv');
+const inspectorImg = d3.select('#inspectorImg');
+
 let drawingSvg = d3.select("svg")
   .call(d3.drag()
     .container(function() { return this; })
     .subject(function() { let p = [d3.event.x, d3.event.y]; return [p, p]; })
     .on("start", dragstarted)
     .on("end", dragstopped));
+
+const svgDiv = d3.select("#svgDiv");
 
 const distanceImageSize = 50;
 const distanceCanvasScale = 10;
@@ -190,8 +195,17 @@ function drawLakes(resultIDs) {
       .append('td')
         .style('width', imageSize + 'px')
         .style('height', imageSize + 'px')
+        .on('mouseover', () => {
+          inspectorDiv.attr('class', '');
+          inspectorImg.attr('src', lakeImageURL(lakeID))
+          svgDiv.attr('class', 'hidden');
+        })
+        .on('mouseout', () => {
+          inspectorDiv.attr('class', 'hidden');
+          svgDiv.attr('class', '');
+        })
         .append('img')
-          .attr('src', 'https://storage.googleapis.com/sketch-a-lake/lakes_collection/' + lakeID + '_raw.png')
+          .attr('src', lakeImageURL(lakeID))
           .attr('width', imageSize)
           .attr('height', imageSize);
 
@@ -204,6 +218,9 @@ function drawLakes(resultIDs) {
           .text(lakes_infos[lakeID].name || 'Unnamed lake')
   })
 }
+
+const lakeImageURL = (lakeID) =>
+  'https://storage.googleapis.com/sketch-a-lake/lakes_collection/' + lakeID + '_raw.png';
 
 function drawDistanceImage(distanceImage){
   clearDistanceCanvas();
