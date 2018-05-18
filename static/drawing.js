@@ -84,18 +84,24 @@ function dragstopped() {
       type: 'POST',
       success: function(distanceImage) {
         displayNeighbors(distanceImage.distance);
-      }
+      },
+      error: function(xhr, textStatus, errorThrown){
+        clearDrawing();
+     }
     });
   }
   // start loading the image.
   img.src = url;
 }
 
-function dragstarted() {
-  clearResultTable();
-
+function clearDrawing() {
   drawingSvg.selectAll("*").remove();
   hidden.selectAll("*").remove();
+}
+
+function dragstarted() {
+  clearResultTable();
+  clearDrawing();
 
   let d = d3.event.subject,
     active = drawingSvg.append("path").attr('fill', '#044f67').datum(d),
