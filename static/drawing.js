@@ -280,9 +280,7 @@ function drawResultLakes(resultIDs) {
           svgDiv.attr('class', '');
         })
         .append('img')
-          .attr('src', lakeImageURL(lakeID))
-          .attr('width', imageSize)
-          .attr('height', imageSize);
+          .attr('src', lakeImageURL(lakeID));
 
     // Add a cell containing the lake name
     lakeTr

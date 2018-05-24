@@ -61,6 +61,8 @@ body {
 
 #resultTable img {
   vertical-align: bottom;
+  width: 90%;
+  height: 90%;
 }
 
 #resultTable .sideText {
