@@ -27,6 +27,10 @@ After a preprocessing time of 1.5 hours, the lake recognition is able to run smo
 First, navigate to the project folder, create a virtual environment and install the requirements:
 
 ```bash
+# You need pip and virtualenv installed globally
+sudo apt install python3-pip
+sudo pip3 install virtualenv 
+
 # Make sure you are in the project folder. Replace <PROJECT_PATH> with your project path.
 cd <PROJECT_PATH>
 
