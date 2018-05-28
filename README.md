@@ -22,7 +22,7 @@ After a preprocessing time of 1.5 hours, the lake recognition is able to run smo
 ![OpenStreetMap link](https://i.imgur.com/8vbu7Yj.png)
 
 
-## Installation
+## Local installation
 
 First, navigate to the project folder, create a virtual environment and install the requirements:
 
@@ -52,7 +52,7 @@ gunicorn run:app
 
 That's it! This runs the app locally, available by default at http://127.0.0.1:8000/.
 
-# Installation on heroku
+## Installation on heroku
 
 If you want to install the app on heroku and run it online:
 
