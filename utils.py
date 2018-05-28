@@ -5,7 +5,9 @@ from skimage.draw import polygon
 from skimage.measure import regionprops, label, find_contours
 from skimage.morphology import medial_axis
 
+# Modified image processing pipeline that accepts canvas drawing as input
 def get_medial_axis_distance(img):
+    # Distance image size is 50 x 50 pixels
     imsize = 50
 
     # x and y coordinates of shape contour points
@@ -49,10 +51,15 @@ def get_medial_axis_distance(img):
     return distance, angle
 
 
+# Converts a list of coordinates to a binary image
+# Fits the shape as much as possible in the image without
+# changing the aspect ratio.
 def binary_image(im_size, x_coordinates, y_coordinates):
     x_coordinates = np.array(x_coordinates, dtype=float)
     y_coordinates = np.array(y_coordinates, dtype=float)
 
+
+    # Normalisation
     x_coordinates -= min(x_coordinates)
     y_coordinates -= min(y_coordinates)
 
@@ -65,7 +72,6 @@ def binary_image(im_size, x_coordinates, y_coordinates):
     else:
         ratio = im_size / y_max
 
-    print(ratio)
 
     x_coordinates *= ratio
     y_coordinates *= ratio
@@ -77,7 +83,8 @@ def binary_image(im_size, x_coordinates, y_coordinates):
 
     return img
 
-
+# Converts a list of coordinates to a centered binary image
+# The y_centroid is put in the center of the image
 def binary_image_center(im_size, x_coordinates, y_coordinates, y_centroid):
     # In that space, y and x axis are inverted
     x_centroid = y_centroid
@@ -106,7 +113,8 @@ def binary_image_center(im_size, x_coordinates, y_coordinates, y_centroid):
 
     return img
 
-
+# Rotates the coordinates such that the principal axis
+# is flat. Makes the comparison independant of orientation.
 def unique_orientation_coords(bin_image, x_coords, y_coords):
     props = regionprops(bin_image)
 
@@ -127,6 +135,7 @@ def unique_orientation_coords(bin_image, x_coords, y_coords):
 
     return x_coords_rot, y_coords_rot, angle
 
+# The centroid in the y axis
 def centroid_y(bin_img, im_size):
     y_counts = np.sum(bin_img, axis=1)
     indices = np.arange(im_size)
