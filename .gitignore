@@ -4,6 +4,9 @@ lake_collection
 posters
 static/images/lakes_collection
 
+# IDE
+.vscode
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
