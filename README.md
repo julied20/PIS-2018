@@ -4,6 +4,8 @@
 
 Live demo here: https://sketch-a-lake.herokuapp.com (heroku is quite slow in the beginning, please be patient).
 
+Screencast: https://youtu.be/EHB2xfm4OPY
+
 ## Abstract
 
 In classical search engines, the user usually uses words to retrieve some content. This approach works well for some applications but is very limited when it comes to searching for images with a certain shape or colour. This is why we built *sketch a lake*. This website allows the user to use his creativity to discover lakes all around Switzerland. By drawing a shape on a canvas, the user is able to search for some of the most similar-shaped lakes amongst the thousand detected in the Helvetic area. 
