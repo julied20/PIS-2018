@@ -1,5 +1,14 @@
 # sketch-a-lake
 
+
+Project in the context of **EPFL** | **Media & Design Lab** | **Personal Interaction Studio 2018**.
+
+Course Tutors:
+* Immanuel Koh 
+* Jeffrey Huang  
+
+
+
 ## Demo
 
 Live demo here: https://sketch-a-lake.herokuapp.com (heroku is quite slow in the beginning, please be patient).
